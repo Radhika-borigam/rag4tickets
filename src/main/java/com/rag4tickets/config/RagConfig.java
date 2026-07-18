@@ -1,6 +1,7 @@
 package com.rag4tickets.config;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.Embedding;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.embedding.EmbeddingRequest;
@@ -50,16 +51,20 @@ public class RagConfig {
     public EmbeddingModel mockEmbeddingModel() {
         return new EmbeddingModel() {
             @Override
-            public List<Double> embed(String text) {
+            public float[] embed(String text) {
                 // Generate a standard mock vector of 384 dimensions (standard MiniLM format)
-                List<Double> vector = new ArrayList<>();
-                // Use deterministic seed hashing based on text to ensure identical queries return identical vectors
+                float[] vector = new float[384];
                 int seed = text.hashCode();
                 java.util.Random rand = new java.util.Random(seed);
                 for (int i = 0; i < 384; i++) {
-                    vector.add(rand.nextDouble());
+                    vector[i] = rand.nextFloat();
                 }
                 return vector;
+            }
+
+            @Override
+            public float[] embed(Document document) {
+                return embed(document.getText());
             }
 
             @Override

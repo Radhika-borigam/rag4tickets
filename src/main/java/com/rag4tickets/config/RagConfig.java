@@ -1,13 +1,19 @@
 package com.rag4tickets.config;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.embedding.Embedding;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.embedding.EmbeddingRequest;
+import org.springframework.ai.embedding.EmbeddingResponse;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 public class RagConfig {
@@ -32,5 +38,39 @@ public class RagConfig {
     @Bean
     public ChatClient chatClient(ChatClient.Builder builder) {
         return builder.build();
+    }
+
+    /**
+     * Fallback mock EmbeddingModel bean that executes if no real embedding model is registered
+     * (e.g. when GEMINI_API_KEY is not configured during local/simulation mode).
+     * This guarantees the application always boots and runs successfully out of the box.
+     */
+    @Bean
+    @ConditionalOnMissingBean(EmbeddingModel.class)
+    public EmbeddingModel mockEmbeddingModel() {
+        return new EmbeddingModel() {
+            @Override
+            public List<Double> embed(String text) {
+                // Generate a standard mock vector of 384 dimensions (standard MiniLM format)
+                List<Double> vector = new ArrayList<>();
+                // Use deterministic seed hashing based on text to ensure identical queries return identical vectors
+                int seed = text.hashCode();
+                java.util.Random rand = new java.util.Random(seed);
+                for (int i = 0; i < 384; i++) {
+                    vector.add(rand.nextDouble());
+                }
+                return vector;
+            }
+
+            @Override
+            public EmbeddingResponse call(EmbeddingRequest request) {
+                List<Embedding> list = new ArrayList<>();
+                int index = 0;
+                for (String text : request.getInstructions()) {
+                    list.add(new Embedding(embed(text), index++));
+                }
+                return new EmbeddingResponse(list);
+            }
+        };
     }
 }

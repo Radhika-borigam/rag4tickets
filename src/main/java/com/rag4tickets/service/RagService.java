@@ -52,7 +52,7 @@ public class RagService {
                 .collect(Collectors.toList());
 
         String context = similarDocs.stream()
-                .map(Document::getContent)
+                .map(Document::getText)
                 .collect(Collectors.joining("\n\n---\n\n"));
 
         // 3. Check for API key availability and execute generation
@@ -92,9 +92,8 @@ public class RagService {
                         """;
 
                 resolution = chatClient.prompt()
-                        .system(systemPrompt)
+                        .system(systemPrompt.replace("{context}", context))
                         .user("INCOMING QUERY TICKET:\n" + queryText)
-                        .advising(ctx -> ctx.getPrompt().getInstructions().replace("{context}", context)) // Bind context
                         .call()
                         .content();
                 source = "Google Gemini LLM (Live)";

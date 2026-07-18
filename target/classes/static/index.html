@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG4Tickets - AI-Powered Ticket Resolution</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-glow"></div>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-logo">
+                <span class="logo-text-gradient">RAG4Tickets</span>
+                <span class="badge">Spring Boot + Spring AI</span>
+            </div>
+            <p class="subtitle">AI-Powered ticket resolution pipeline linking JIRA issues and GitHub commit history with Redis caching optimizations.</p>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="dashboard-grid">
+            <!-- Left Side: Control & Search -->
+            <section class="control-panel glass-card">
+                <h2>System Diagnostics</h2>
+                <div class="status-row">
+                    <span class="status-label">Vector Database Status:</span>
+                    <span id="vector-status" class="status-value status-checking">Checking...</span>
+                </div>
+                
+                <button id="btn-ingest-mock" class="btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    Ingest Mock Dataset (React 19)
+                </button>
+
+                <hr class="divider">
+
+                <h2>Query Resolution</h2>
+                <p class="panel-desc">Enter an incoming JIRA ticket description or error logs to retrieve relevant historical fixes and generate a resolution plan.</p>
+                
+                <div class="search-box">
+                    <textarea id="query-input" placeholder="e.g. UI freezes during concurrent rendering routing..." rows="4"></textarea>
+                    <button id="btn-submit-query" class="btn-primary">
+                        <span>Resolve Ticket</span>
+                        <div class="spinner hidden" id="query-spinner"></div>
+                    </button>
+                </div>
+
+                <div class="suggested-queries">
+                    <span class="suggest-label">Try these samples:</span>
+                    <div class="pill-group">
+                        <button class="query-pill" data-query="React 19 UI freezes when concurrent routing transitions occur">UI Freeze</button>
+                        <button class="query-pill" data-query="Infinite rendering loop with useEffect dependency array React 19">useEffect loop</button>
+                        <button class="query-pill" data-query="componentWillReceiveProps is removed in React 19 causing app crash">componentWillReceiveProps</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Side: RAG Results (Hidden initially, shown on query) -->
+            <section class="results-panel hidden" id="results-section">
+                <!-- Diagnostics Bar -->
+                <div class="diagnostics-bar glass-card">
+                    <div class="diag-metric">
+                        <span class="diag-label">Engine Latency</span>
+                        <span class="diag-value" id="diag-latency">0 ms</span>
+                    </div>
+                    <div class="diag-metric">
+                        <span class="diag-label">Response Source</span>
+                        <span class="diag-value" id="diag-source">Unknown</span>
+                    </div>
+                    <div class="diag-metric">
+                        <span class="diag-label">Semantic Match Score</span>
+                        <span class="diag-value" id="diag-score">0%</span>
+                    </div>
+                </div>
+
+                <div class="panes-container">
+                    <!-- Split Pane: Ingestion Sources -->
+                    <div class="split-pane glass-card">
+                        <h3>Retrieved Context</h3>
+                        <p class="pane-desc">Semantically matching historical documents found in vector index:</p>
+                        <div class="reference-list" id="references-container">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Split Pane: AI Resolution Plan -->
+                    <div class="split-pane glass-card">
+                        <h3>AI Suggested Resolution Plan</h3>
+                        <p class="pane-desc">Synthesized step-by-step guide and code fix:</p>
+                        <div class="resolution-content markdown-body" id="resolution-container">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Developed with Spring AI, Redis Caching, and Google Gemini API. Structured for Docker deployment.</p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

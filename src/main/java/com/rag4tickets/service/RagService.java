@@ -69,7 +69,7 @@ public class RagService {
             context = "No historical context available.";
         }
 
-        if (apiKey == null || apiKey.trim().isEmpty() || apiKey.contains("YOUR_API_KEY")) {
+        if (apiKey == null || apiKey.trim().isEmpty() || apiKey.contains("YOUR_API_KEY") || apiKey.contains("DUMMY_KEY_FOR_LOCAL_SIMULATION")) {
             // High fidelity local mock fallback for zero-setup demo
             resolution = getFallbackResolution(queryText);
             source = "Local Engine (Simulation Mode - Set GEMINI_API_KEY for live LLM)";

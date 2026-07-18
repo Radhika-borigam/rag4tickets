@@ -6,6 +6,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class RagService {
         this.chatClient = chatClient;
     }
 
+    @Cacheable(value = "resolutions", key = "#queryText")
     public QueryResponse query(String queryText) {
         long startTime = System.currentTimeMillis();
 

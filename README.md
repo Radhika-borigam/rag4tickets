@@ -10,6 +10,11 @@
 
 ---
 
+## 📺 Live Demo
+![RAG4Tickets Demo Video](assets/demo_video.webp)
+
+---
+
 ## 🛠️ System Architecture
 
 ```mermaid

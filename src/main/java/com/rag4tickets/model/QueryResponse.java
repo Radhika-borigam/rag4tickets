@@ -11,15 +11,17 @@ public class QueryResponse implements Serializable {
     private long latencyMs;
     private String source;
     private double similarityScore;
+    private double groundingScore;
 
     public QueryResponse() {}
 
-    public QueryResponse(String resolution, List<String> references, long latencyMs, String source, double similarityScore) {
+    public QueryResponse(String resolution, List<String> references, long latencyMs, String source, double similarityScore, double groundingScore) {
         this.resolution = resolution;
         this.references = references;
         this.latencyMs = latencyMs;
         this.source = source;
         this.similarityScore = similarityScore;
+        this.groundingScore = groundingScore;
     }
 
     public String getResolution() {
@@ -60,5 +62,13 @@ public class QueryResponse implements Serializable {
 
     public void setSimilarityScore(double similarityScore) {
         this.similarityScore = similarityScore;
+    }
+
+    public double getGroundingScore() {
+        return groundingScore;
+    }
+
+    public void setGroundingScore(double groundingScore) {
+        this.groundingScore = groundingScore;
     }
 }

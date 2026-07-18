@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const diagLatency = document.getElementById('diag-latency');
     const diagSource = document.getElementById('diag-source');
     const diagScore = document.getElementById('diag-score');
+    const diagGrounding = document.getElementById('diag-grounding');
     
     const referencesContainer = document.getElementById('references-container');
     const resolutionContainer = document.getElementById('resolution-container');
@@ -93,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Populate Diagnostics
             diagLatency.textContent = `${data.latencyMs} ms`;
             diagScore.textContent = `${Math.round(data.similarityScore * 100)}%`;
+            diagGrounding.textContent = `${Math.round(data.groundingScore)}%`;
             
             // Redis Caching Visual indicator
             if (data.latencyMs < 20) {

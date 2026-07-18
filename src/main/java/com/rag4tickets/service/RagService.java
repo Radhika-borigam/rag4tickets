@@ -35,7 +35,10 @@ public class RagService {
         List<Document> similarDocs = new ArrayList<>();
         try {
             similarDocs = vectorStore.similaritySearch(
-                    SearchRequest.query(queryText).withTopK(2)
+                    SearchRequest.builder()
+                            .query(queryText)
+                            .topK(2)
+                            .build()
             );
         } catch (Exception e) {
             System.err.println("Error searching vector store: " + e.getMessage());

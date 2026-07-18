@@ -17,7 +17,7 @@ public class RagConfig {
 
     @Bean
     public SimpleVectorStore vectorStore(EmbeddingModel embeddingModel) {
-        SimpleVectorStore store = new SimpleVectorStore(embeddingModel);
+        SimpleVectorStore store = SimpleVectorStore.builder(embeddingModel).build();
         File file = new File(vectorStorePath);
         if (file.exists()) {
             try {

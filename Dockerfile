@@ -1,5 +1,5 @@
 # Stage 1: Build the Maven application
-FROM maven:3.8.5-openjdk-17-slim AS build
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
 COPY pom.xml .
 # Download dependencies first to cache this layer
@@ -8,7 +8,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Stage 2: Create execution container
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/rag4tickets-0.0.1-SNAPSHOT.jar app.jar
 

@@ -31,11 +31,19 @@ public class RagController {
     }
 
     @PostMapping("/query")
-    public ResponseEntity<QueryResponse> query(@RequestBody QueryRequest request) {
+    public ResponseEntity<?> query(@RequestBody QueryRequest request) {
         if (request.getQuery() == null || request.getQuery().trim().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(ragService.query(request.getQuery()));
+        try {
+            return ResponseEntity.ok(ragService.query(request.getQuery()));
+        } catch (Exception e) {
+            System.err.println(">>> CONTROLLER ERROR in /api/query: " + e.getClass().getName() + ": " + e.getMessage());
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Query failed: " + e.getMessage());
+            error.put("source", "Controller Error Handler");
+            return ResponseEntity.status(500).body(error);
+        }
     }
 
     @PostMapping("/ingest")

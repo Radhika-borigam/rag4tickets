@@ -28,10 +28,28 @@ public class RagService {
     public RagService(SimpleVectorStore vectorStore, ChatClient chatClient) {
         this.vectorStore = vectorStore;
         this.chatClient = chatClient;
+        System.out.println(">>> DIAGNOSTIC: RagService constructed. apiKey value: " + this.apiKey);
     }
 
     @Cacheable(value = "resolutions", key = "#queryText")
     public QueryResponse query(String queryText) {
+        System.out.println(">>> DIAGNOSTIC: query() called. apiKey = '" + this.apiKey + "'");
+        try {
+            return doQuery(queryText);
+        } catch (Exception e) {
+            System.err.println(">>> ERROR in query(): " + e.getClass().getName() + ": " + e.getMessage());
+            return new QueryResponse(
+                "### Error\nAn internal error occurred. Please try again.\n\n" + getFallbackResolution(queryText),
+                java.util.List.of("[SYSTEM] Fallback mode due to internal error"),
+                0L,
+                "Local Fallback Engine (Internal Error)",
+                0.88,
+                0.0
+            );
+        }
+    }
+
+    private QueryResponse doQuery(String queryText) {
         long startTime = System.currentTimeMillis();
 
         // 1. Retrieve relevant historical documents

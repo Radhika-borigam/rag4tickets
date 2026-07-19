@@ -32,7 +32,7 @@
 
 ```mermaid
 graph TD
-    A[New JIRA Ticket Query] --> K{Redis Cache Hit?}
+    A[New JIRA Ticket Query] --> K{In-Memory Cache Hit?\n@Cacheable}
     K -- Yes --> L[⚡ Return Cached Resolution < 5ms]
     K -- No --> B[Embed Query with Mock EmbeddingModel]
     B --> C[Query SimpleVectorStore]
@@ -46,7 +46,7 @@ graph TD
     I -- No --> SIM[🤖 Simulation Mode - Local Engine]
     J --> R[Return Resolution + PR Links]
     SIM --> R
-    R --> M[Cache in Redis for 10min]
+    R --> M[Store in Spring Cache\nConcurrentMapCacheManager]
     M --> L
 ```
 
